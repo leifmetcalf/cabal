@@ -33,19 +33,49 @@ them for us.
 Using "cabal init"
 ------------------
 
-The ``cabal init`` command is interactive. It asks us a number of
-questions starting with the package name and version.
+The ``cabal init`` command creates the files ``proglet.cabal`` and
+``Setup.hs``. By default it additionally creates some files usually
+needed for an executable package: a changelog file ``CHANGELOG.md`` and
+a Main module ``Main.hs``.
+
+The ``-l`` flag selects the license for the package, according to the names
+in the `SPDX License List <https://spdx.org/licenses>`
 
 ::
 
     $ cabal init
-    Package name [default "proglet"]?
-    Package version [default "0.1"]?
+    
+    Guessing dependencies...
+    
+    Generating LICENSE...
+    Warning: unknown license type, you must put a copy in LICENSE yourself.
+    Generating Setup.hs...
+    Generating CHANGELOG.md...
+    Generating Main.hs...
+    Generating proglet.cabal...
+    ...
+    
+Using the ``--lib`` option will make Cabal initialize a library package
+instead of an executable package. This means it will not create the
+``Main.hs`` file, and the ``proglet.cabal`` will be written for a library,
+not an executable. The ``cabal init`` command can also initialize a
+package containing a library and one or more executables, with the
+``--libandexe`` option.
+
+The ``--interactive`` or ``-i`` flag enables ``cabal init``'s interactive mode.
+It asks some questions about the package, like its name and version.
+
+::
+
+    $ cabal init -i
+    Should I generate a simple project with sensible defaults? [default: y]
+    ...
+    Package name? [default: proglet]
+    Package version? [default: 0.1.0.0]
     ...
 
 It also asks questions about various other bits of package metadata. For
-a package that you never intend to distribute to others, these fields
-can be left blank.
+a package won't be distributed to others, these fields can be left blank.
 
 One of the important questions is whether the package contains a library
 or an executable. Libraries are collections of Haskell modules that can
@@ -55,25 +85,27 @@ are standalone programs.
 ::
 
     What does the package build:
-       1) Library
-       2) Executable
+       1) Executable
+       2) Library
+       3) Library and Executable
     Your choice?
 
 For the moment these are the only choices. For more complex packages
 (e.g. a library and multiple executables or test suites) the ``.cabal``
 file can be edited afterwards.
 
-Finally, ``cabal init`` creates the initial ``proglet.cabal`` and
-``Setup.hs`` files, and depending on your choice of license, a
+Finally, ``cabal init --interactive`` creates the initial ``proglet.cabal``
+and ``Setup.hs`` files, and depending on your choice of license, a
 ``LICENSE`` file as well.
 
 ::
 
     Generating LICENSE...
     Generating Setup.hs...
+    Generating CHANGELOG.md...
+    Generating MyLib.hs...
     Generating proglet.cabal...
-
-    You may want to edit the .cabal file and add a Description field.
+    ...
 
 As this stage the ``proglet.cabal`` is not quite complete and before you
 are able to build the package you will need to edit the file and add
